@@ -11,7 +11,7 @@ import ProfilePage from './pages/ProfilePage';
 import AuthContext from './store/auth_context';
 import "./App.css"
 import CreateBoardComponent from './components/board/CreateBoardComponent';   
-
+  
 function App() {
   const authCtx = useContext(AuthContext);
 
