@@ -4,7 +4,7 @@ let logoutTimer;
 
 const AuthContext = React.createContext({
     token: '',
-    userObj: { username: '' },
+    userObj: {},
     isLoggedIn: false,
     isSuccess: false,
     isGetSuccess: false,
@@ -59,6 +59,7 @@ export const AuthContextProvider = (props) => {
             clearTimeout(logoutTimer);
         }
     }, []);
+
     const getUserHandler = () => {
         setIsGetSuccess(false);
         const data = authAction.getUserActionHandler(token);
@@ -66,6 +67,7 @@ export const AuthContextProvider = (props) => {
             if (result !== null) {
                 console.log('get user start!');
                 const userData = result.data;
+                console.log(userData);
                 setUserObj(userData);
                 setIsGetSuccess(true);
             }
@@ -81,6 +83,7 @@ export const AuthContextProvider = (props) => {
             }
         });
     };
+    
     useEffect(() => {
         if (tokenData) {
             console.log(tokenData.duration);

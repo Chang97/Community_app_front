@@ -1,22 +1,24 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import BoardService from '../../service/BoardService';
 import MenuService from '../../service/MenuService';
 import {useLocation, useNavigate, useParams} from 'react-router-dom';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import AuthContext from '../../store/auth_context';
 //import MenuContext from '../../store/menu_context';
 
 function CreateBoardComponent(props) {
     // 파라미터 취득
     const {id} = useParams();
     const location = useLocation();
+    const authCtx = useContext(AuthContext);
 
     // cu 구분 파라미터
     const gubun = location.state.gubun != null ? location.state.gubun : {gubun : '_update'};
 
     //const menuCtx = useContext(MenuContext);
     const [menus, setMenus] = useState([]);
-    const [menu, setMenu] = useState({id : '1', parentId : ''});
+    const [menu, setMenu] = useState({id : '1', parentId : '', menuCd : 'test'});
     const [title, setTitle] = useState('');
     const [contents, setContents] = useState('');
     const [user, setUser] = useState({});
@@ -25,19 +27,24 @@ function CreateBoardComponent(props) {
 
     useEffect(() => {
       //  console.log(menuCtx.menuObj.menuNm);
+        /***************************
+         * 메뉴 콤보박스 세팅
+         ***************************/
         MenuService.getAllMenus().then((res) => {
             setMenus(res.data);
         });
-
+        
+        // 생성
         if (gubun === 'create') {
-            return
+            // user 정보 세팅
+            setUser(authCtx.userObj);
+            return;
         } else {
             BoardService.getOneBoard(id).then(res => {
                 let board = res.data;
                 if (board.menu.parentId === null) {
                     board.menu.parentId = '';
                 }
-                
 
                 setMenu(board.menu);
                 setTitle(board.title);
@@ -64,14 +71,7 @@ function CreateBoardComponent(props) {
         e.preventDefault();
         
         let board = {
-            user : {
-                id : '1',
-                username : 'admin',
-                password : '1234',
-                email : '',
-                role : 'USER',
-                delYn : 'N'
-            },
+            user : user,
             menu : menu,
             title : title,
             contents : contents
@@ -80,7 +80,7 @@ function CreateBoardComponent(props) {
         console.log("board => ", JSON.stringify(board));
         if (gubun === 'create') {
             BoardService.createBoard(board).then(res => {
-                navigate('/board')
+                navigate(`/${menu.menuCd}`);
             });
         } else {
             console.log('id : ' + id + '            board : ' + board.contents);
