@@ -3,6 +3,7 @@ import MenuService from "../service/MenuService";
 
 const MenuContext = React.createContext({
     menuId : '',
+    menuCd : '',
     menuNm : ''
 });
 
@@ -11,6 +12,7 @@ export const MenuContextProvider = (props) => {
     
     const [menuObj, setMenuObj] = useState({
         menuId : '',
+        menuCd : '',
         menuNm : ''
     });
 
@@ -26,6 +28,7 @@ export const MenuContextProvider = (props) => {
 
     const contextValue = {
         menuId : menuObj.menuId,
+        menuCd : menuObj.menuCD,
         menuNm : menuObj.menuNm
     };
 
