@@ -15,6 +15,7 @@ const ReadBoardComponent = (props) => {
     const { id } = useParams();
     const [board, setBoard] = useState({});
     const [user, setUser] = useState({});
+    const [menu, setMenu] = useState({});
     const [loginUsername, setLoginUsername] = useState('');
 
     let isLogin = authCtx.isLoggedIn;
@@ -23,6 +24,7 @@ const ReadBoardComponent = (props) => {
         BoardService.getOneBoard(id).then(res => {
             setBoard(res.data);
             setUser(res.data.user);
+            setMenu(res.data.menu);
             console.log(res.data);
         });
         // eslint-disable-next-line
@@ -46,7 +48,7 @@ const ReadBoardComponent = (props) => {
             BoardService.deleteBoard(id).then(res => {
                 console.log("delete result => ", JSON.stringify(res));
                 if (res.status === 200) {
-                    navigate('/board');
+                    navigate(`/${menu.menuCd}`);
                 } else {
                     alert('글 삭제가 실패했습니다.');
                 }
@@ -80,7 +82,7 @@ const ReadBoardComponent = (props) => {
     }
 
     const goToList = () => {
-        navigate('/board');
+        navigate(`/${menu.menuCd}`);
     }
 
     return (
@@ -97,15 +99,7 @@ const ReadBoardComponent = (props) => {
                                 </div>
                                 <div className='row'>
                                     <label>Contents</label>
-                                    <CKEditor
-                                        editor={ ClassicEditor }
-                                        id='contents'
-                                        data={ board.contents }
-                                        disabled = 'true'
-
-                                        onReady={ editor => {
-                                        } }
-                                    />
+                                    <div dangerouslySetInnerHTML={{ __html: board.contents }}></div>
                                 </div>
                                 <div className='row'>
                                     <label>작성자</label> : {user.username}
