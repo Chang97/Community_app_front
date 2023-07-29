@@ -3,9 +3,7 @@ import React  from 'react';
 import { useEffect, useContext } from "react";
 import BoardService from "../../service/BoardService";
 import { useNavigate, useParams } from "react-router-dom";
-import { CKEditor } from '@ckeditor/ckeditor5-react';
 import AuthContext from '../../store/auth_context';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 
 const ReadBoardComponent = (props) => {

@@ -5,6 +5,7 @@ import {useLocation, useNavigate, useParams} from 'react-router-dom';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import AuthContext from '../../store/auth_context';
+import Editor from '../common/Editor';
 //import MenuContext from '../../store/menu_context';
 
 function CreateBoardComponent(props) {
@@ -12,6 +13,7 @@ function CreateBoardComponent(props) {
     const {id} = useParams();
     const location = useLocation();
     const authCtx = useContext(AuthContext);
+    const [editorContent, setEditorContent] = useState('');
 
     // cu 구분 파라미터
     const gubun = location.state.gubun != null ? location.state.gubun : {gubun : '_update'};
@@ -105,6 +107,12 @@ function CreateBoardComponent(props) {
         }
     }
 
+
+    const handleEditorChange = (data) => {
+      setEditorContent(data);
+    };
+  
+
     const cancel = () => {
         navigate('/board');
     }
@@ -134,9 +142,11 @@ function CreateBoardComponent(props) {
                                 </div>
                                 <div className='form-group'>
                                 <label>Content</label>
+                                <Editor onChange={handleEditorChange} value={editorContent} />
                                 <CKEditor
                                     editor={ ClassicEditor }
                                     data={contents}
+                                   
                                     onReady={ editor => {
                                         console.log( 'Editor is ready to use!', editor );
                                     } }

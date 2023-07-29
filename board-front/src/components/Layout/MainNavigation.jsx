@@ -10,6 +10,7 @@ const MainNavigation = () => {
     useEffect(() => {
         MenuService.getAllMenus().then((res) => {
             setMenus(res.data);
+            
         })
 
         // eslint-disable-next-line
