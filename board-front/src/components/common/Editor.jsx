@@ -45,20 +45,15 @@ const Editor = ({setDesc, desc, setImage}) => { // (1)
             config={{ // (4)
                 extraPlugins: [uploadPlugin]
             }}
-            data="<p>Hello World</p>"
             onReady={editor => {
-                // console.log('Editor is ready to use!', editor);
             }}
             onChange={(event, editor) => {
                 const data = editor.getData();
                 setDesc(data);
-                console.log(desc);
             }}
             onBlur={(event, editor) => {
-                // console.log('Blur.', editor);
             }}
             onFocus={(event, editor) => {
-                // console.log('Focus.', editor);
             }}/>
     )
 }

@@ -2,8 +2,6 @@ import React, {useState, useEffect, useContext} from 'react';
 import BoardService from '../../service/BoardService';
 import MenuService from '../../service/MenuService';
 import {useLocation, useNavigate, useParams} from 'react-router-dom';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import AuthContext from '../../store/auth_context';
 import Editor from '../common/Editor';
 //import MenuContext from '../../store/menu_context';
@@ -143,25 +141,6 @@ function CreateBoardComponent(props) {
                                 <div className='form-group'>
                                 <label>Content</label>
                                 <Editor onChange={handleEditorChange} value={editorContent} />
-                                <CKEditor
-                                    editor={ ClassicEditor }
-                                    data={contents}
-                                   
-                                    onReady={ editor => {
-                                        console.log( 'Editor is ready to use!', editor );
-                                    } }
-                                    onChange={ ( event, editor ) => {
-                                        const data = editor.getData();
-                                        changeContentsHandler(data);
-                                    } }
-                                    onBlur={ ( event, editor ) => {
-                                        console.log( 'Blur.', editor );
-                                    } }
-                                    onFocus={ ( event, editor ) => {
-                                        console.log( 'Focus.', editor );
-                                    } }
-                                />
-
                                 </div>
                                 <div className='form-group'>
                                     <label>작성자 : {user.username}</label>
