@@ -2,59 +2,21 @@ import React, {useState} from 'react'
 import axios from 'axios';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import UploadAdapter from './UploadAdapter';
 
-const Editor = ({setDesc, desc, setImage}) => { // (1)
-    const [flag, setFlag] = useState(false);
-    const imgLink = "http://localhost:8000/images/"
-
-    const customUploadAdapter = (loader) => { // (2)
-        return {
-            upload(){
-                return new Promise ((resolve, reject) => {
-                    const data = new FormData();
-                     loader.file.then( (file) => {
-                            data.append("name", file.name);
-                            data.append("file", file);
-
-                            axios.post('/api/upload', data)
-                                .then((res) => {
-                                    if(!flag){
-                                        setFlag(true);
-                                        setImage(res.data.filename);
-                                    }
-                                    resolve({
-                                        default: `${imgLink}/${res.data.filename}`
-                                    });
-                                })
-                                .catch((err)=>reject(err));
-                        })
-                })
-            }
-        }
-    }
-
-    function uploadPlugin (editor){ // (3)
-        editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
-            return customUploadAdapter(loader);
-        }
-    }
-
+const Editor = ({onChange, value }) => { // (1)
     return (
         <CKEditor
             editor={ClassicEditor}
+            data={value }
             config={{ // (4)
-                extraPlugins: [uploadPlugin]
-            }}
-            onReady={editor => {
+                extraPlugins: [UploadAdapter]
             }}
             onChange={(event, editor) => {
                 const data = editor.getData();
-                setDesc(data);
+                onChange(data);
             }}
-            onBlur={(event, editor) => {
-            }}
-            onFocus={(event, editor) => {
-            }}/>
+        />
     )
 }
 
