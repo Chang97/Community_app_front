@@ -10,7 +10,8 @@ export default class UploadAdapter {
   async upload() {
     const data = new FormData();
     data.append('image', await this.loader.file);
-
+    
+    console.log(UPLOAD_BASE_URL + '/image');
     return new Promise((resolve, reject) => {
       axios.post(UPLOAD_BASE_URL + '/image', data).then((response) => {
         // 이미지 업로드 성공 시 업로드된 이미지의 URL 반환
