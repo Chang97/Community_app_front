@@ -10,8 +10,9 @@ const fetchAuth = async (fetchData) => {
             (method === 'post' && (await axios.post(url, data, header))) ||
             (method === 'put' && (await axios.put(url, data, header))) ||
             (method === 'delete' && (await axios.delete(url, header)));
+
+            
         if (response && response.data.error) {
-            console.log(response.data.error);
             alert("아이디 또는 비밀번호가 잘못되었습니다.");
             return null;
         }
@@ -25,12 +26,10 @@ const fetchAuth = async (fetchData) => {
         if (axios.isAxiosError(err)) {
             const serverError = err;
             if (serverError && serverError.response) {
-                console.log(serverError.response.data);
                 alert("failed!");
                 return null;
             }
         }
-        console.log(err);
         alert("failed!");
         return null;
     }

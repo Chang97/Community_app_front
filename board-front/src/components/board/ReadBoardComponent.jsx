@@ -23,14 +23,12 @@ const ReadBoardComponent = (props) => {
             setBoard(res.data);
             setUser(res.data.user);
             setMenu(res.data.menu);
-            console.log(res.data);
         });
         // eslint-disable-next-line
     }, []);
 
     useEffect(() => {
         if (isLogin) {
-            console.log('start');
             authCtx.getUser();
             setLoginUsername(authCtx.userObj.username);
         }
@@ -44,7 +42,6 @@ const ReadBoardComponent = (props) => {
     const deleteView = async () => {
         if (window.confirm("삭제하시겠습니까?")) {
             BoardService.deleteBoard(id).then(res => {
-                console.log("delete result => ", JSON.stringify(res));
                 if (res.status === 200) {
                     navigate(`/${menu.menuCd}`);
                 } else {

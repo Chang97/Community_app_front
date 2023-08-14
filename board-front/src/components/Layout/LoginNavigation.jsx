@@ -14,7 +14,6 @@ const MainNavigation = () => {
 
     useEffect(() => {
         if (isLogin) {
-            console.log('start');
             authCtx.getUser();
         }
         // eslint-disable-next-line
@@ -23,7 +22,6 @@ const MainNavigation = () => {
     useEffect(() => {
         
         if (isGet) {
-            console.log('get start');
             callback(authCtx.userObj.username);
         }
         // eslint-disable-next-line

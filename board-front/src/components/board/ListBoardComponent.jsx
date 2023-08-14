@@ -29,7 +29,6 @@ const ListBoardComponent = (props) => {
 
     useEffect(() => {
         if (isLogin) {
-            console.log('start');
             authCtx.getUser();
         }
         // eslint-disable-next-line

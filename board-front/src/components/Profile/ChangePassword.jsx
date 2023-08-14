@@ -16,9 +16,7 @@ const ChangePassword = () => {
             alert("Password Write Correct!");
             return;
         }
-        console.log('change pw start!');
         authCtx.changePassword(enteredExPassword, enteredNewPassword);
-        console.log(authCtx.isSuccess);
         if (authCtx.isSuccess) {
             alert("다시 로그인 하세요.");
             authCtx.logout();

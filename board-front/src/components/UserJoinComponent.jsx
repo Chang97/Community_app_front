@@ -31,7 +31,6 @@ function UserJoinComponenet() {
             password : password
         };
 
-        console.log("user => ", JSON.stringify(user));
         UserService.createUser(user).then(res => {
             navigate('/login');
         });

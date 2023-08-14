@@ -1,4 +1,4 @@
-import React, { useRef, useContext } from 'react';
+import React, { useRef, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../../store/auth_context';
 
@@ -9,15 +9,17 @@ const CreateAccountForm = () => {
     const emailInputRef = useRef(null);
     const passwordInputRef = useRef(null);
     
-    const submitHandler = (event) => {
+    const submitHandler = async (event) => {
         event.preventDefault();
         const enteredUsername = usernameInputRef.current.value;
         const enteredEmail = emailInputRef.current.value;
         const enteredPassword = passwordInputRef.current.value;
-        
+
         authCtx.signup(enteredUsername, enteredPassword, enteredEmail);
+        
         if (authCtx.isSuccess) {
-            return navigate("/", { replace: true });
+            alert('회원가입 완료!!');
+            return navigate("/login", { replace: true });
         }
     };
     return (

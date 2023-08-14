@@ -16,6 +16,7 @@ const AuthContext = React.createContext({
 });
 
 export const AuthContextProvider = (props) => {
+
     const tokenData = authAction.retrieveStoredToken();
     let initialToken;
     if (tokenData) {
@@ -23,24 +24,25 @@ export const AuthContextProvider = (props) => {
     }
     const [token, setToken] = useState(initialToken);
     const [userObj, setUserObj] = useState({
-        username: ''
+        id: '',
+        username: '',
+        email: '',
+        role: ''
     });
     const [isSuccess, setIsSuccess] = useState(false);
     const [isGetSuccess, setIsGetSuccess] = useState(false);
     const userIsLoggedIn = !!token;
     
     const signupHandler = (username, email, password) => {
+        //debugger;
         setIsSuccess(false);
         const response = authAction.signupActionHandler(username, email, password);
         response.then((result) => {
-            if (result !== null) {
-                setIsSuccess(true);
-            }
+            setIsSuccess(!!result);
         });
     };
     const loginHandler = (username, password) => {
         setIsSuccess(false);
-        console.log(isSuccess);
         const data = authAction.loginActionHandler(username, password);
         data.then((result) => {
             if (result !== null) {
@@ -48,7 +50,6 @@ export const AuthContextProvider = (props) => {
                 setToken(loginData.accessToken);
                 logoutTimer = setTimeout(logoutHandler, authAction.loginTokenHandler(loginData.accessToken, loginData.tokenExpiresIn));
                 setIsSuccess(true);
-                console.log(isSuccess);
             }
         });
     };
@@ -65,9 +66,7 @@ export const AuthContextProvider = (props) => {
         const data = authAction.getUserActionHandler(token);
         data.then((result) => {
             if (result !== null) {
-                console.log('get user start!');
                 const userData = result.data;
-                console.log(userData);
                 setUserObj(userData);
                 setIsGetSuccess(true);
             }
@@ -86,16 +85,16 @@ export const AuthContextProvider = (props) => {
     
     useEffect(() => {
         if (tokenData) {
-            console.log(tokenData.duration);
             logoutTimer = setTimeout(logoutHandler, tokenData.duration);
         }
     }, [tokenData, logoutHandler]);
+
     const contextValue = {
-        token,
-        userObj,
+        token : token,
+        userObj : userObj,
         isLoggedIn: userIsLoggedIn,
-        isSuccess,
-        isGetSuccess,
+        isSuccess : isSuccess,
+        isGetSuccess : isGetSuccess,
         signup: signupHandler,
         login: loginHandler,
         logout: logoutHandler,
