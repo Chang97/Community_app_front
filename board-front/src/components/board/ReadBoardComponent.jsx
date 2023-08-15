@@ -9,31 +9,37 @@ import AuthContext from '../../store/auth_context';
 const ReadBoardComponent = (props) => {
     const authCtx = useContext(AuthContext);
     const navigate = useNavigate();
-
     const { id } = useParams();
     const [board, setBoard] = useState({});
     const [user, setUser] = useState({});
     const [menu, setMenu] = useState({});
     const [loginUsername, setLoginUsername] = useState('');
 
-    let isLogin = authCtx.isLoggedIn;
+    // let isLogin = authCtx.isLoggedIn;
 
     useEffect(() => {
         BoardService.getOneBoard(id).then(res => {
             setBoard(res.data);
             setUser(res.data.user);
             setMenu(res.data.menu);
+            console.log('@@@@ board user : ' + JSON.stringify(res.data.user));
         });
         // eslint-disable-next-line
     }, []);
 
     useEffect(() => {
-        if (isLogin) {
-            authCtx.getUser();
+        if ( authCtx.isLoggedIn ) {
+            authCtx.getUser(); // getUserHandler 호출
+        }
+        // eslint-disable-next-line
+    }, [authCtx.isLoggedIn]);
+    
+    useEffect(() => {
+        if ( authCtx.isGetSuccess ) {
             setLoginUsername(authCtx.userObj.username);
         }
         // eslint-disable-next-line
-    }, [isLogin]);
+    }, [authCtx.isLoggedIn, authCtx.userObj]);
 
     const updateBoard = () => {
         navigate(`/create-board/${id}`, {state : {gubun : 'update'}});
@@ -52,20 +58,21 @@ const ReadBoardComponent = (props) => {
     }
 
     const returnBoardMenu = (menuId) => {
-        let menu = null;
-        if (menuId === 1) {
-            menu = "자유게시판";
-        } else if (menuId === 2) {
-            menu = "질문과 답변 게시판";
+        console.log(menu.menu_nm)
+        if (!!menuId) {
+            return (
+                <div className="row">
+                    <label>Board Menu : {menu.menuNm}</label> 
+                </div>
+            )
         } else {
-            menu = "타입 미지정";
+            return (
+                <div className="row">
+                    <label>Board Menu : 타입미지정</label> 
+                </div>
+            )
         }
-
-        return (
-            <div className="row">
-                <label>Board Menu : </label> {menu}
-            </div>
-        )
+        
     }
 
     const returnDate = (cTime, uTime) => {
@@ -88,7 +95,7 @@ const ReadBoardComponent = (props) => {
                         <h3 className='text-center'>상세보기</h3>
                         <div className='card-body'>
                             <form>
-                               {returnBoardMenu(board.menu)}
+                               {returnBoardMenu(menu.id)}
                                 <div className='row'>
                                     <label>Title : {board.title}</label> 
                                 </div>
@@ -97,7 +104,7 @@ const ReadBoardComponent = (props) => {
                                     <div dangerouslySetInnerHTML={{ __html: board.contents }}></div>
                                 </div>
                                 <div className='row'>
-                                    <label>작성자</label> : {user.username}
+                                    <label>작성자  : {user.username}</label>
                                 </div>
                                 {returnDate(board.createdDate, board.modifiedDate)}
                                 <button className='btn btn-primary' onClick={goToList}>글 목록</button>

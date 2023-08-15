@@ -34,7 +34,6 @@ export const AuthContextProvider = (props) => {
     const userIsLoggedIn = !!token;
     
     const signupHandler = (username, email, password) => {
-        //debugger;
         setIsSuccess(false);
         const response = authAction.signupActionHandler(username, email, password);
         response.then((result) => {
