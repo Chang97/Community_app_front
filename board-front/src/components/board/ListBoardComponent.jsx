@@ -43,7 +43,7 @@ const ListBoardComponent = (props) => {
             pageNo = paging.totalPages;
         }
 
-        BoardService.getBoard(pageNo - 1).then((res) => {
+        BoardService.getBoard(menuCd, pageNo - 1).then((res) => {
             setPageNo(res.data.pageable.pageNumber + 1);
             setPaging(res.data);
             setBoards(res.data.content);
