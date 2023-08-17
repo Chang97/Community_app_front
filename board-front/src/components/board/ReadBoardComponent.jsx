@@ -4,6 +4,8 @@ import { useEffect, useContext } from "react";
 import BoardService from "../../service/BoardService";
 import { useNavigate, useParams } from "react-router-dom";
 import AuthContext from '../../store/auth_context';
+import DOMPurify from "isomorphic-dompurify"
+import "react-quill/dist/quill.core.css"
 
 
 const ReadBoardComponent = (props) => {
@@ -22,7 +24,6 @@ const ReadBoardComponent = (props) => {
             setBoard(res.data);
             setUser(res.data.user);
             setMenu(res.data.menu);
-            console.log('@@@@ board user : ' + JSON.stringify(res.data.user));
         });
         // eslint-disable-next-line
     }, []);
@@ -58,7 +59,6 @@ const ReadBoardComponent = (props) => {
     }
 
     const returnBoardMenu = (menuId) => {
-        console.log(menu.menu_nm)
         if (!!menuId) {
             return (
                 <div className="row">
@@ -99,10 +99,12 @@ const ReadBoardComponent = (props) => {
                                 <div className='row'>
                                     <label>Title : {board.title}</label> 
                                 </div>
-                                <div className='row'>
-                                    <label>Contents</label>
-                                    <div dangerouslySetInnerHTML={{ __html: board.contents }}></div>
-                                </div>
+                                <div
+                                  className="view ql-editor" // react-quill css
+                                  dangerouslySetInnerHTML={{
+                                  __html: DOMPurify.sanitize(board.contents)
+                                  }}
+                                />
                                 <div className='row'>
                                     <label>작성자  : {user.username}</label>
                                 </div>

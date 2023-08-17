@@ -1,2 +1,3 @@
 board-front/node_modules/
 board-front/build/
+board-front/src/Firebase.mjs

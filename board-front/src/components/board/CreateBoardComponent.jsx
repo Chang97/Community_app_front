@@ -30,10 +30,6 @@ function CreateBoardComponent(props) {
          ***************************/
         MenuService.getAllMenus().then((res) => {
             setMenus(res.data);
-            // 첫 번째 아이템을 선택
-            if (res.data.length > 0) {
-                changeMenuHandler({ target: { value: res.data[0].id } });
-            }
         }).catch((error) => {
             // 오류 처리
             console.error('Error fetching menus:', error);
@@ -41,8 +37,6 @@ function CreateBoardComponent(props) {
 
         // 생성
         if (gubun === 'create') {
-            // user 정보 세팅
-            setUser(authCtx.userObj);
             //return;
         } else {
             BoardService.getOneBoard(id).then(res => {
@@ -58,6 +52,28 @@ function CreateBoardComponent(props) {
         }
         // eslint-disable-next-line
     }, []);
+
+    useEffect(() => {
+        if (authCtx.isLoggedIn) {
+            authCtx.getUser();
+        }
+        // eslint-disable-next-line
+    }, [authCtx.isLoggedIn]);
+
+    useEffect(() => {
+        if ( authCtx.isGetSuccess ) {
+            setUser(authCtx.userObj);
+        }
+        // eslint-disable-next-line
+    }, [authCtx.isLoggedIn, authCtx.userObj]);
+
+    useEffect(() => {
+        if ( menus.length > 0 ) {
+            const selected = menus.find(menu => menu.id === 1);
+            setMenu(selected);
+        }
+        // eslint-disable-next-line
+    }, [menus]);
 
     const changeMenuHandler = (e) => {
         const selectedId = parseInt(e.target.value);
@@ -110,7 +126,7 @@ function CreateBoardComponent(props) {
   
 
     const cancel = () => {
-        navigate('/board');
+        navigate(`/${menu.menuCd}`);
     }
 
     return (
@@ -139,7 +155,6 @@ function CreateBoardComponent(props) {
                                 <div className='form-group'>
                                 <label>Content</label>
                                 <Editor
-                                    placeholder="내용을 입력하세요."
                                     value={editorContent}
                                     onChange={handleEditorChange}
                                 />
